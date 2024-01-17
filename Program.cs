@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
-
+using TaskForge.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // allows our api endpoints to access the database through Entity Framework Core
-builder.Services.AddNpgsql<RecipeBoxDbContext>(builder.Configuration["RecipeBoxDbConnectionString"]);
+builder.Services.AddNpgsql<TaskForgeDbContext>(builder.Configuration["TaskForgeDbConnectionString"]);
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>
@@ -31,7 +31,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("http://localhost:3000",
-                                "http://localhost:7007")
+                                "http://localhost:7273")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod()
                                 .AllowAnyOrigin();
