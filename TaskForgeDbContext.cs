@@ -15,7 +15,7 @@ public class TaskForgeDbContext : DbContext
 
         modelBuilder.Entity<User>().HasData(new User[]
         {
-            new User { Id = 1, Email = "email@email.com", FirebaseUid = "123" }
+            new User { Id = 1, Name = "Maddi", Email = "email@email.com", FirebaseUid = "123" }
         });
 
         modelBuilder.Entity<Task>().HasData(new Task[]
