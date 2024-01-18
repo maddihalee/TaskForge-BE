@@ -1,8 +1,7 @@
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 using TaskForge.Models;
+using Task = TaskForge.Models.Task;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,8 +85,59 @@ app.MapGet("/user", (TaskForgeDbContext db) =>
 // Get users by ID
 app.MapGet("/user/{id}", (TaskForgeDbContext db, int id) =>
 {
-    var user = db.Users.Where(x = x => x.Id == id);
+    var user = db.Users.Where(x => x.Id == id);
     return user;
+});
+
+// Get all tasks
+app.MapGet("/task", (TaskForgeDbContext db) =>
+{
+    return db.Tasks.ToList();
+});
+
+//Get a single task
+app.MapGet("/task/{id}", (TaskForgeDbContext db, int id) =>
+{
+    var tasks = db.Tasks.SingleOrDefault(x => x.Id == id);
+    return tasks;
+});
+
+// Create a task
+app.MapPost("/task", (TaskForgeDbContext db, Task task) =>
+{
+    db.Tasks.Add(task);
+    db.SaveChanges();
+    return Results.Created($"/tasks/{task.Id}", task);
+});
+
+// Delete a task
+app.MapDelete("/task/{id}", (TaskForgeDbContext db, int id) =>
+{
+    Task task = db.Tasks.SingleOrDefault(task => task.Id == id);
+    if (task == null)
+    {
+        return Results.NotFound();
+    }
+    db.Tasks.Remove(task);
+    db.SaveChanges();
+    return Results.NoContent();
+});
+
+//Update a task
+app.MapPut("/task/{id}", (TaskForgeDbContext db, int id, Task task) =>
+{
+    Task taskToUpdate = db.Tasks.SingleOrDefault(t => t.Id == id);
+    if (taskToUpdate == null)
+    {
+        return Results.NotFound();
+    }
+    taskToUpdate.Status = task.Status;
+    taskToUpdate.Title = task.Title;
+    taskToUpdate.Description = task.Description;
+    taskToUpdate.DueDate = task.DueDate;
+    taskToUpdate.Status = task.Status;
+    db.SaveChanges();
+    return Results.NoContent();
 });
 
 app.Run();
