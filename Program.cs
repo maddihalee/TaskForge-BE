@@ -55,6 +55,39 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Register the user
+app.MapPost("/register", (TaskForgeDbContext db, User user) =>
+{
+    db.Users.Add(user);
+    db.SaveChanges();
+    return Results.Created($"/user/user.Id", user);
+});
 
+// Check if the user is in the database
+app.MapGet("/checkuser/{uid}", (TaskForgeDbContext db, string uid) =>
+{
+    var user = db.Users.Where(x => x.FirebaseUid == uid).ToList();
+    if (uid == null)
+    {
+        return Results.NotFound();
+    }
+    else
+    {
+        return Results.Ok(user);
+    }
+});
+
+// Get all users
+app.MapGet("/user", (TaskForgeDbContext db) =>
+{
+    return db.Users.ToList();
+});
+
+// Get users by ID
+app.MapGet("/user/{id}", (TaskForgeDbContext db, int id) =>
+{
+    var user = db.Users.Where(x = x => x.Id == id);
+    return user;
+});
 
 app.Run();
