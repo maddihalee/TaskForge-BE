@@ -140,4 +140,17 @@ app.MapPut("/task/{id}", (TaskForgeDbContext db, int id, Task task) =>
     return Results.NoContent();
 });
 
+//Get all priorities
+app.MapGet("/priority", (TaskForgeDbContext db) =>
+{
+    return db.Priorities.ToList();
+});
+
+//Get a single priority
+app.MapGet("/priority/{id}", (TaskForgeDbContext db, int id) =>
+{
+    var priorities = db.Priorities.Where(p => p.Id == id);
+    return priorities;
+});
+    
 app.Run();
