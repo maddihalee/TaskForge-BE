@@ -107,7 +107,7 @@ app.MapPost("/task", (TaskForgeDbContext db, Task task) =>
 {
     db.Tasks.Add(task);
     db.SaveChanges();
-    return Results.Created($"/tasks/{task.Id}", task);
+    return Results.Created($"/task/{task.Id}", task);
 });
 
 // Delete a task
@@ -134,8 +134,8 @@ app.MapPut("/task/{id}", (TaskForgeDbContext db, int id, Task task) =>
     taskToUpdate.Status = task.Status;
     taskToUpdate.Title = task.Title;
     taskToUpdate.Description = task.Description;
-    taskToUpdate.DueDate = task.DueDate;
     taskToUpdate.Status = task.Status;
+    taskToUpdate.Due = task.Due;
     db.SaveChanges();
     return Results.NoContent();
 });

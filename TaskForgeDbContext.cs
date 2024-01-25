@@ -1,5 +1,6 @@
 ﻿namespace TaskForge.Models;
 using Microsoft.EntityFrameworkCore;
+using TaskForge.Migrations;
 
 public class TaskForgeDbContext : DbContext
 {
@@ -20,7 +21,7 @@ public class TaskForgeDbContext : DbContext
 
         modelBuilder.Entity<Task>().HasData(new Task[]
         {
-            new Task { Id = 1, Title = "Applications", Description = "Apply to 5 jobs", DueDate = DateTime.Now, UserId = 1, Status = false, },
+            new Task { Id = 1, Due = new DateTime(2024, 1, 24),Title = "Applications", Description = "Apply to 5 jobs", UserId = 1, Status = false, },
         });
 
         modelBuilder.Entity<Priority>().HasData(new Priority[]
